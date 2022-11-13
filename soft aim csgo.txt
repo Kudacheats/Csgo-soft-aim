@@ -1,0 +1,99 @@
+Menu Tray, Icon, ddores.dll, 2
+#NoEnv
+#SingleInstance, Force
+#Persistent
+#InstallKeybdHook
+#UseHook
+#KeyHistory, 0
+#HotKeyInterval 1
+#MaxHotkeysPerInterval 127
+SetKeyDelay,-1, 1
+SetControlDelay, -1
+SetMouseDelay, -1
+SetWinDelay,-1
+SendMode, InputThenPlay
+SetBatchLines,-1
+ListLines, Off
+CoordMode, Pixel, Screen, RGB
+CoordMode, Mouse, Screen
+PID := DllCall("GetCurrentProcessId")
+Process, Priority, %PID%, High
+ 
+EMCol += 0x000000
+ColVn := 64
+ 
+ZeroX := (A_ScreenWidth // 2)
+ZeroY := (A_ScreenHeight // 2)
+CFovX := 250
+CFovY := 250
+ScanL := X - CFovX
+ScanT := Y 
+ScanR := X + CFovX
+ScanB := Y + CFovY
+*~$F3::
+Loop  {
+mousegetpos, x, y
+PixelSearch, AimPixelX, AimPixelY, ScanL, ScanT, ScanR, ScanB, emcol, ColVn, Fast RGB
+if errorlevel = 0 
+{
+gosub cent
+}
+}
+return
+*~$F4::
+Loop  {
+mousegetpos, x, y
+ 
+ 
+PixelSearch, AimPixelX, AimPixelY, ScanL, ScanT, ScanR, ScanB, emcol, ColVn, Fast RGB
+ 
+ 
+ 
+ 
+ 
+ 
+if errorlevel = 0 
+{
+gosub trenteun
+}
+}
+return
+cent:
+            AimX := AimPixelX - ZeroX
+            AimY := AimPixelY - ZeroY
+            DirX := -1
+            DirY := -1
+            If ( AimX > 0 ) {
+                DirX := 1
+            }
+            If ( AimY > 0 ) {
+                DirY := 1
+            }
+            AimOffsetX := AimX * DirX
+            AimOffsetY := AimY * DirY
+            MoveX := Floor(( AimOffsetX ** ( 1 / 2 ))) * DirX
+            MoveY := Floor(( AimOffsetY ** ( 1 / 2 ))) * DirY
+            DllCall("mouse_event", uint, 1, int, MoveX/100, int, 0, uint, 0, int, 0)
+ 
+return
+trenteun:
+            AimX := AimPixelX - ZeroX
+            AimY := AimPixelY - ZeroY
+            DirX := -1
+            DirY := -1
+            If ( AimX > 0 ) {
+                DirX := 1
+            }
+            If ( AimY > 0 ) {
+                DirY := 1
+            }
+            AimOffsetX := AimX * DirX
+            AimOffsetY := AimY * DirY
+            MoveX := Floor(( AimOffsetX ** ( 1 / 2 ))) * DirX
+            MoveY := Floor(( AimOffsetY ** ( 1 / 2 ))) * DirY
+            DllCall("mouse_event", uint, 1, int, MoveX/31, int, 0, uint, 0, int, 0)
+ 
+return
+ 
+ 
+INS:: pause
